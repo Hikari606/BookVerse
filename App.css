@@ -1,0 +1,47 @@
+/* الستايل العام */
+.app-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: antiquewhite;
+}
+/*ستايل الهيدر */
+.app-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  
+}
+
+/* ستايل اضافة كتاب جديد */
+.add-book-form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+  flex-wrap: wrap; 
+}
+.add-book-form input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  outline: none;
+  width: 200px;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+.add-book-form input:focus {
+  border: 1px solid #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+}
+.add-book-form button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.add-book-form button:hover {
+  background-color: #0056b3;
+}
