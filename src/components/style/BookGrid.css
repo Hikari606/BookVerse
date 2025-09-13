@@ -1,0 +1,102 @@
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 0px;
+
+  padding:0;
+}
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.book-card {
+  
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: #fff;
+  cursor: pointer;
+}
+
+.book-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.book-cover {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit:cover;
+  display: block;
+ 
+}
+
+.book-content {
+  position: absolute;
+  bottom: -100%;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: rgba(0, 0, 0, 0.70);
+  color: #fff;
+  padding: 15px;
+  opacity: 0;
+  transition: bottom 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  text-align:center;
+  overflow:hidden;
+}
+
+
+.book-card:hover .book-content {
+  opacity: 1;
+  bottom:0;
+}
+.book-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+.book-title {
+  font-size: 1.1rem;
+  margin: 10px 5px;
+
+}
+.book-author {
+  color: #ccc;
+  font-size: 0.9rem;
+
+}
+.book-genre {
+  display: inline-block;
+  margin: 3px 0;
+  padding: 2px 4px;
+  background: #ce9874ff;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #fff;
+ 
+}
+.heart-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: red;
+}
