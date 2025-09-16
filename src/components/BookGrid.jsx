@@ -3,6 +3,9 @@ import BookCard from "./BookCard";
 import "./style/BookGrid.css";
 
 function BookGrid({ books }) {
+  if( !books.length){
+    return <p className="no-books">There are no books to display </p>;
+  }
   return (
     <div className="book-grid">
       {books.map((book, index) => (

@@ -1,0 +1,19 @@
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.filter-icon {
+  font-size: 18px;
+  color: #295c32ff;
+}
+
+.filter-bar select,
+.filter-bar button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}

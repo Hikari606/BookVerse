@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import SearchBar from "./components/SearchBar";
-import BookGrid from "./components/BookGrid";
+import React, { useState, useEffect } from "react";
 import NavBar from "./components/NavBar";
+import BookGrid from "./components/BookGrid";
+import AddBook from "./components/AddBook";
+import FilterBar from "./components/FilterBar";
 
 import "./App.css";
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const [books, setBooks] = useState([
+  // البيانات الأصلية
+  const [originalBooks, setOriginalBooks] = useState([
     {
       id: 1,
       title: "The Housemaid",
@@ -21,74 +21,122 @@ function App() {
       id: 2,
       title: "The Hobbit",
       author: "J.R.R. Tolkien",
-      genre: "Dystopian",
+      genre: "Fantasy",
       cover:
         "https://tse3.mm.bing.net/th/id/OIP.qGSRsYjM5W1PI_exazs_AwHaLH?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
     },
     {
       id: 3,
       title: "See You Later, Alligator",
-      author: "Sally Hopgood, Emma Levey (Illustrator)",
+      author: "Sally Hopgood",
       genre: "Fiction",
       cover:
         "https://tse1.mm.bing.net/th/id/OIP.2xqCgydlcf6vL0bG4TdXWAHaKX?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
     },
   ]);
 
+  const [displayedBooks, setDisplayedBooks] = useState(originalBooks);
+
+  // معايير الفلترة والفرز
+  const [searchTerm] = useState("");
+  const [filterGenre, setFilterGenre] = useState("All");
+  const [sortBy, setSortBy] = useState("title");
+  const [sortOrder, setSortOrder] = useState("asc");
+
   // إضافة كتاب جديد
-  const [newBook, setNewBook] = useState({ title: "", author: "", cover: "" });
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [newBook, setNewBook] = useState({
+    title: "",
+    author: "",
+    genre: "",
+    cover: "",
+  });
+
+  const openAdd = () => setIsAddOpen(true);
+  const closeAdd = () => setIsAddOpen(false);
 
   const handleAddBook = (e) => {
     e.preventDefault();
-    if (!newBook.title || !newBook.author) return;
+    if (!newBook.title || !newBook.author || !newBook.genre) return;
 
     const bookToAdd = {
-      id: books.length + 1,
+      id: originalBooks.length + 1,
       ...newBook,
-      cover: newBook.cover || "https://via.placeholder.com/150",
-      genre: "Unknown",
+      cover: newBook.cover || "https://via.placeholder.com/150"
     };
-
-    setBooks([...books, bookToAdd]);
-    setNewBook({ title: "", author: "", cover: "" });
+    const updatedBooks = [...originalBooks, bookToAdd];
+    setOriginalBooks(updatedBooks);
+    setNewBook({ title: "", author: "", genre: "", cover: "" });
+    closeAdd();
   };
 
-  // البحث
-  const filteredBooks = books.filter(
-    (book) =>
-      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // دوال الفلترة والفرز
+  const filterItems = (items, searchTerm, genre) => {
+    let filtered = items;
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (item) =>
+          item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.author.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    if (genre && genre !== "All") {
+      filtered = filtered.filter((item) => item.genre === genre);
+    }
+    return filtered;
+  };
+
+  const sortItems = (items, sortBy, sortOrder) => {
+    return [...items].sort((a, b) => {
+      if (sortBy === "title") {
+        return sortOrder === "asc"
+          ? a.title.localeCompare(b.title)
+          : b.title.localeCompare(a.title);
+      } else if (sortBy === "author") {
+        return sortOrder === "asc"
+          ? a.author.localeCompare(b.author)
+          : b.author.localeCompare(a.author);
+      }
+      return 0;
+    });
+  };
+
+  // إعادة حساب displayedBooks عند أي تغيير
+  useEffect(() => {
+    const filtered = filterItems(originalBooks, searchTerm, filterGenre);
+    const sorted = sortItems(filtered, sortBy, sortOrder);
+    console.log("filter Genre", filterGenre); 
+    
+    setDisplayedBooks(sorted);
+  }, [originalBooks, searchTerm, filterGenre, sortBy, sortOrder]);
+
+  // الأنواع المتاحة للفلترة
+  const genres = ["All", "Classic", "Fantasy", "Fiction"];
 
   return (
     <div className="app-container">
-      <NavBar />
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <NavBar onAddClick={openAdd} onSearchClick={() => {}} />
 
-      <form className="add-book-form" onSubmit={handleAddBook}>
-        <input
-          type="text"
-          placeholder="Book Title"
-          value={newBook.title}
-          onChange={(e) => setNewBook({ ...newBook, title: e.target.value })}
+      {isAddOpen && (
+        <AddBook
+          newBook={newBook}
+          setNewBook={setNewBook}
+          handleAddBook={handleAddBook}
+          closeAdd={closeAdd}
         />
-        <input
-          type="text"
-          placeholder="Author"
-          value={newBook.author}
-          onChange={(e) => setNewBook({ ...newBook, author: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Cover URL (optional)"
-          value={newBook.cover}
-          onChange={(e) => setNewBook({ ...newBook, cover: e.target.value })}
-        />
-        <button type="submit">➕ Add Book</button>
-      </form>
+      )}
 
-   
-      <BookGrid books={filteredBooks} />
+      <FilterBar
+        genres={genres}
+        filterGenre={filterGenre}
+        setFilterGenre={setFilterGenre}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+      />
+
+      <BookGrid books={displayedBooks} />
     </div>
   );
 }
