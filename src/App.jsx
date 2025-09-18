@@ -8,7 +8,7 @@ import Favorites from "./components/Favorites";
 import "./App.css";
 
 function App() {
-  // البيانات الأصلية
+
   const [originalBooks, setOriginalBooks] = useState([
     {
       id: 1,
@@ -79,7 +79,7 @@ function App() {
     closeAdd();
   };
 
-  // إدارة المفضلات
+
   const toggleFavorite = (book) => {
     let updatedFavorites;
     if (favorites.find((f) => f.id === book.id)) {
@@ -91,7 +91,7 @@ function App() {
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
 
-  // دوال الفلترة والفرز
+  // الفلترة والفرز
   const filterItems = (items, searchTerm, genre) => {
     let filtered = items;
     if (searchTerm) {
@@ -122,7 +122,7 @@ function App() {
     });
   };
 
-  // إعادة حساب displayedBooks عند أي تغيير
+  
   useEffect(() => {
     const filtered = filterItems(originalBooks, searchTerm, filterGenre);
     const sorted = sortItems(filtered, sortBy, sortOrder);
