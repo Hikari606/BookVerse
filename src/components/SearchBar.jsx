@@ -1,5 +1,5 @@
 import React from "react";
-import "./style/SearchBar.css"; // إذا CSS في مجلد styles خارج NavBar
+import "./style/SearchBar.css"; 
 
 function SearchBar({ searchTerm, setSearchTerm }) {
   return (
@@ -14,3 +14,4 @@ function SearchBar({ searchTerm, setSearchTerm }) {
 }
 
 export default SearchBar;
+
