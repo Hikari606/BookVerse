@@ -1,0 +1,86 @@
+header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #053004;
+  padding: 12px 10px;
+  border-radius: 100px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 10;
+}
+
+header h3 {
+  margin: 0;
+  color: #f9f6f6;
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+header nav a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: none;
+  
+}
+
+.nav-close-btn {
+  display: none;
+}
+
+.toggle-dark {
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: rgb(240, 255, 253);
+}
+
+.toggle-dark.hidden {
+  display: none;
+}
+
+.favorites-icon, .add-icon {
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #f9f6f6;
+}
+
+header.dark {
+  background-color: #333;
+}
+
+.responsive_nav {
+  flex-direction: column;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background-color: #291b1b;
+  width: 200px;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .nav-btn {
+    display: block;
+  }
+  nav a {
+    display: block;
+  }
+  .nav-close-btn {
+    display: block;
+  }
+}
