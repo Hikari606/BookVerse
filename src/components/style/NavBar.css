@@ -66,7 +66,7 @@ header.dark {
   position: absolute;
   top: 60px;
   right: 0;
-  background-color: #291b1b;
+  background-color: #053213;
   width: 200px;
   padding: 10px;
   display: flex;
@@ -76,11 +76,14 @@ header.dark {
 @media (max-width: 768px) {
   .nav-btn {
     display: block;
+    color: #f9f6f6;
   }
   nav a {
     display: block;
   }
   .nav-close-btn {
     display: block;
+    color: #f9f6f6;
   }
 }
+
