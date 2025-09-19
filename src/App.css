@@ -1,0 +1,21 @@
+.app-container {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app-container.dark {
+  background-color: #1e1e1e;
+  color: #f5f5f5;
+}
+
+.no-books {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.2rem;
+}

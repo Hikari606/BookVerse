@@ -1,7 +1,17 @@
+<<<<<<< HEAD
 # BookVerse
+A modern interactive library system to browse, search, and filter books by author or genre, with favorites saved locally.
+=======
+# React + Vite
 
-BookGrid: displays a grid of books (just 3 for now )
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-SearchBar: allows searching for books by title or author.
+Currently, two official plugins are available:
 
-Add Book: lets users add a new book with title and author, which will be displayed in the BookGrid
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+>>>>>>> 74bda96 (NavBar and card done)
