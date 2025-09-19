@@ -1,10 +1,7 @@
-
 import React, { useState } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
-
 const BookCard = ({ book, isFavorite, toggleFavorite }) => {
   const [hover, setHover] = useState(false);
-
   return (
     <div
       className="relative overflow-hidden rounded-lg cursor-pointer shadow-md transform transition-transform duration-300 hover:scale-105 group"
@@ -29,7 +26,7 @@ const BookCard = ({ book, isFavorite, toggleFavorite }) => {
         <span className="text-xs my-0.5">{book.genre}</span>
 
         <button
-          className="absolute top-2.5 right-5 text-red-500 text-2xl cursor-pointer bg-none border-none"
+          className="absolute top-2.5 right-1 text-red-500 text-2xl cursor-pointer bg-none border-none"
           onClick={() => toggleFavorite(book)}
         >
           {isFavorite ? <FaHeart /> : <FaRegHeart />}
@@ -37,10 +34,10 @@ const BookCard = ({ book, isFavorite, toggleFavorite }) => {
 
         {/* زر التحميل */}
         <button
-          className="absolute top-2.5 right-14 text-white text-2xl cursor-pointer bg-none border-none"
+          className="absolute top-1 right-7 text-white text-2xl cursor-pointer bg-none border-none"
           onClick={() => alert('Download book!')} 
         >
-          ⬇️
+          📥
         </button>
       </div>
     </div>
