@@ -1,50 +1,86 @@
-import React, { useState } from "react";
-import { FaRegHeart, FaHeart, FaDownload } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import NavBar from "./components/NavBar";
+import BookGrid from "./components/BookGrid";
+import AddBook from "./components/AddBook";
+import FilterBar from "./components/FilterBar";
+import SearchBar from "./components/SearchBar";
 
-const BookCard = ({ book, isFavorite, toggleFavorite }) => {
-  const [hover, setHover] = useState(false);
+import "./index.css";
+
+function App() {
+  const [originalBooks, setOriginalBooks] = useState([
+    { id: 1, title: "The Housemaid", author: "Freida McFadden", genre: "Classic", cover:"https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1661176310l/61991328.jpg" },
+    { id: 2, title: "The Hobbit", author: "J.R.R. Tolkien", genre: "Fantasy", cover:"https://tse3.mm.bing.net/th/id/OIP.qGSRsYjM5W1PI_exazs_AwHaLH" },
+    { id: 3, title: "See You Later, Alligator", author: "Sally Hopgood", genre: "Fiction", cover:"https://tse1.mm.bing.net/th/id/OIP.2xqCgydlcf6vL0bG4TdXWAHaKX?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" },
+  ]);
+
+  const [displayedBooks, setDisplayedBooks] = useState(originalBooks);
+  const [darkMode, setDarkMode] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterGenre, setFilterGenre] = useState("All");
+  const [sortBy, setSortBy] = useState("title");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [newBook, setNewBook] = useState({ title: "", author: "", genre: "", cover: "" });
+  const [favorites, setFavorites] = useState(JSON.parse(localStorage.getItem("favorites")) || []);
+
+  const openAdd = () => setIsAddOpen(true);
+  const closeAdd = () => setIsAddOpen(false);
+
+  const handleAddBook = (e) => {
+    e.preventDefault();
+    if (!newBook.title || !newBook.author || !newBook.genre) return;
+
+    const bookToAdd = { id: originalBooks.length + 1, ...newBook, cover: newBook.cover || "https://via.placeholder.com/150" };
+    setOriginalBooks([...originalBooks, bookToAdd]);
+    setNewBook({ title: "", author: "", genre: "", cover: "" });
+    closeAdd();
+  };
+
+  const toggleFavorite = (book) => {
+    let updatedFavorites = favorites.find(f => f.id === book.id)
+      ? favorites.filter(f => f.id !== book.id)
+      : [...favorites, book];
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
+  const filterItems = (items, searchTerm, genre) => {
+    let filtered = items;
+    if (searchTerm) filtered = filtered.filter(item => item.title.toLowerCase().includes(searchTerm.toLowerCase()) || item.author.toLowerCase().includes(searchTerm.toLowerCase()));
+    if (genre && genre !== "All") filtered = filtered.filter(item => item.genre === genre);
+    return filtered;
+  };
+
+  const sortItems = (items, sortBy, sortOrder) => {
+    return [...items].sort((a, b) => sortBy === "title"
+      ? (sortOrder === "asc" ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title))
+      : (sortOrder === "asc" ? a.author.localeCompare(b.author) : b.author.localeCompare(a.author)));
+  };
+
+  useEffect(() => {
+    const filtered = filterItems(originalBooks, searchTerm, filterGenre);
+    setDisplayedBooks(sortItems(filtered, sortBy, sortOrder));
+  }, [originalBooks, searchTerm, filterGenre, sortBy, sortOrder]);
+
+  const genres = ["All", "Classic", "Fantasy", "Fiction"];
 
   return (
-    <div
-      className="relative overflow-hidden rounded-lg cursor-pointer shadow-md transform transition-transform duration-300 hover:scale-105 group"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
-      <img
-        src={book.cover}
-        alt={book.title}
-        className="w-full block rounded-lg"
+    <div className={`${darkMode ? "bg-gray-900 text-gray-100" : "bg-[#0A2403] text-gray-900"} min-h-screen font-sans pt-32 p-5`}>
+      <NavBar
+        onAddClick={openAdd}
+        toggleDark={() => setDarkMode(!darkMode)}
+        darkMode={darkMode}
+        favorites={favorites}
       />
-      <div
-        className={`absolute bottom-0 left-0 w-full bg-black/70 text-white p-2.5 translate-y-full transition-transform duration-300 group-hover:translate-y-0 ${
-          hover ? "show" : ""
-        }`}
-      >
-        <h2 className="text-base m-0">{book.title}</h2>
-        <p className="text-xs my-0.5">by {book.author}</p>
-        <span className="text-xs my-0.5">{book.genre}</span>
 
-        {/* الأزرار */}
-        <div className="absolute top-2.5 right-2 flex space-x-3">
-          {/* زر القلب */}
-          <button
-            className="text-red-500 text-l cursor-pointer bg-none border-none"
-            onClick={() => toggleFavorite(book)}
-          >
-            {isFavorite ? <FaHeart /> : <FaRegHeart />}
-          </button>
+      {isAddOpen && <AddBook newBook={newBook} setNewBook={setNewBook} handleAddBook={handleAddBook} closeAdd={closeAdd} />}
 
-          {/* زر التحميل */}
-          <button
-            className="text-green-400 text-l cursor-pointer bg-none border-none"
-            onClick={() => alert(`Downloading ${book.title}...`)}
-          >
-            <FaDownload />
-          </button>
-        </div>
-      </div>
+      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <FilterBar genres={genres} filterGenre={filterGenre} setFilterGenre={setFilterGenre} sortBy={sortBy} setSortBy={setSortBy} sortOrder={sortOrder} setSortOrder={setSortOrder} />
+      <BookGrid books={displayedBooks} favorites={favorites} toggleFavorite={toggleFavorite} />
     </div>
   );
-};
+}
 
-export default BookCard;
+export default App;
