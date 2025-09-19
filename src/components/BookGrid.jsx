@@ -1,3 +1,4 @@
+// BookGrid.jsx
 import React, { useState, useEffect } from "react";
 import BookCard from "./BookCard";
 
@@ -5,7 +6,6 @@ function BookGrid({ books, favorites, toggleFavorite }) {
   const [animate, setAnimate] = useState(true);
 
   useEffect(() => {
-    // تشغيل الـ animation لمدة 2 ثانية ثم توقف
     const timer = setTimeout(() => setAnimate(false), 2000);
     return () => clearTimeout(timer);
   }, []);
@@ -15,7 +15,7 @@ function BookGrid({ books, favorites, toggleFavorite }) {
 
   return (
     <div
-      className={`grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-5 py-5 box-border space-x-4 ${
+      className={`grid grid-cols-[repeat(auto-fit,minmax(18px,1fr))] gap-5 py-5 ${
         animate ? "animate-pulse" : ""
       }`}
     >
