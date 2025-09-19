@@ -3,11 +3,12 @@ import NavBar from "./components/NavBar";
 import BookGrid from "./components/BookGrid";
 import AddBook from "./components/AddBook";
 import FilterBar from "./components/FilterBar";
+import Favorites from "./components/Favorites";
 
-import "./App.css";
+import "./index.css";
 
 function App() {
-  // البيانات الأصلية
+
   const [originalBooks, setOriginalBooks] = useState([
     {
       id: 1,
@@ -37,6 +38,9 @@ function App() {
 
   const [displayedBooks, setDisplayedBooks] = useState(originalBooks);
 
+  // وضع الليلي
+  const [darkMode, setDarkMode] = useState(false);
+
   // معايير الفلترة والفرز
   const [searchTerm] = useState("");
   const [filterGenre, setFilterGenre] = useState("All");
@@ -52,6 +56,11 @@ function App() {
     cover: "",
   });
 
+  // المفضلات
+  const [favorites, setFavorites] = useState(
+    JSON.parse(localStorage.getItem("favorites")) || []
+  );
+
   const openAdd = () => setIsAddOpen(true);
   const closeAdd = () => setIsAddOpen(false);
 
@@ -62,7 +71,7 @@ function App() {
     const bookToAdd = {
       id: originalBooks.length + 1,
       ...newBook,
-      cover: newBook.cover || "https://via.placeholder.com/150"
+      cover: newBook.cover || "https://via.placeholder.com/150",
     };
     const updatedBooks = [...originalBooks, bookToAdd];
     setOriginalBooks(updatedBooks);
@@ -70,7 +79,19 @@ function App() {
     closeAdd();
   };
 
-  // دوال الفلترة والفرز
+
+  const toggleFavorite = (book) => {
+    let updatedFavorites;
+    if (favorites.find((f) => f.id === book.id)) {
+      updatedFavorites = favorites.filter((f) => f.id !== book.id);
+    } else {
+      updatedFavorites = [...favorites, book];
+    }
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
+  // الفلترة والفرز
   const filterItems = (items, searchTerm, genre) => {
     let filtered = items;
     if (searchTerm) {
@@ -101,22 +122,25 @@ function App() {
     });
   };
 
-  // إعادة حساب displayedBooks عند أي تغيير
+  
   useEffect(() => {
     const filtered = filterItems(originalBooks, searchTerm, filterGenre);
     const sorted = sortItems(filtered, sortBy, sortOrder);
-    console.log("filter Genre", filterGenre); 
-    
     setDisplayedBooks(sorted);
   }, [originalBooks, searchTerm, filterGenre, sortBy, sortOrder]);
 
-  // الأنواع المتاحة للفلترة
   const genres = ["All", "Classic", "Fantasy", "Fiction"];
 
   return (
-    <div className="app-container">
-      <NavBar onAddClick={openAdd} onSearchClick={() => {}} />
-
+    <div className={darkMode ? 
+      "font-sans bg-[#1e1e1e]  text-gray-100 p-5 min-h-screen flex flex-col box-border " 
+    : "font-sans bg-[#f5f5f5]  p-5 min-h-screen flex flex-col box-border "}>
+      <NavBar
+        onAddClick={openAdd}
+        toggleDark={() => setDarkMode(!darkMode)}
+        darkMode={darkMode}
+        favorites={favorites}
+      />
       {isAddOpen && (
         <AddBook
           newBook={newBook}
@@ -136,7 +160,11 @@ function App() {
         setSortOrder={setSortOrder}
       />
 
-      <BookGrid books={displayedBooks} />
+      <BookGrid
+        books={displayedBooks}
+        favorites={favorites}
+        toggleFavorite={toggleFavorite}
+      />
     </div>
   );
 }

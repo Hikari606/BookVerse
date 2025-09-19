@@ -1,16 +1,15 @@
-import React from "react";
-import "./style/SearchBar.css"; 
+import React from "react"; 
+
 function SearchBar({ searchTerm, setSearchTerm }) {
   return (
-    <div className="search-container">
-      <input
-        type="text"
-        className="search-input"
-        placeholder="🔍 Search by book title or author..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-    </div>
+    <input
+      type="text"
+      placeholder="Search by title or author..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="w-full p-2.5 mb-4 rounded border border-gray-300 text-sm "
+    />
   );
 }
+
 export default SearchBar;
